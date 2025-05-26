@@ -16,6 +16,11 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=myorg
       - DOCKER_INFLUXDB_INIT_BUCKET=weather
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=mytoken
+    healthcheck:
+      test: ["CMD", "curl", "-s", "http://localhost:8086/health"]
+      interval: 5s
+      retries: 20
+      start_period: 10s
     networks: [kafka-net]
     
   kafka1:
@@ -84,6 +89,27 @@ services:
     networks:
       - kafka-net
 
+  telegraf:
+    build: ./telegraf
+    container_name: telegraf
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+    networks: [kafka-net]
+
+  init-topic-telegraf:
+    image: bitnami/kafka:latest
+    depends_on: [kafka1]
+    entrypoint: ["/bin/bash", "-c"]
+    command: |
+      "
+      until kafka-topics.sh --bootstrap-server kafka1:9092 --list > /dev/null 2>&1; do
+        sleep 2
+      done
+      kafka-topics.sh --bootstrap-server kafka1:9092 --create --if-not-exists --topic weather-telegraf --partitions 4 --replication-factor 3
+      "
+    networks: [kafka-net]
 
   inject:
     build: ./inject
@@ -121,6 +147,23 @@ services:
       kafka-topics.sh --bootstrap-server kafka1:9092 --create --if-not-exists --topic weather --partitions 4 --replication-factor 3
       "
     networks: [kafka-net]
+
+  init-alert:
+    build:
+      context: ./init-alert
+    depends_on:
+      - influxdb
+      - kafka1
+      - kafka2
+      - kafka3
+      - kafdrop
+    networks:
+      - kafka-net
+    environment:
+      - INFLUX_URL=http://influxdb:8086
+      - INFLUX_TOKEN=mytoken
+      - ORG=myorg
+
 
 networks:
   kafka-net:
