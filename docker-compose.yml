@@ -24,7 +24,7 @@ services:
     networks: [kafka-net]
     
   kafka1:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:4.0.0
     container_name: kafka1
     ports:
       - "9092:9092"
@@ -43,7 +43,7 @@ services:
     networks: [kafka-net]
 
   kafka2:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:4.0.0
     container_name: kafka2
     environment:
       - KAFKA_KRAFT_CLUSTER_ID=kraft-cluster
@@ -59,7 +59,7 @@ services:
     networks: [kafka-net]
 
   kafka3:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:4.0.0
     container_name: kafka3
     environment:
       - KAFKA_KRAFT_CLUSTER_ID=kraft-cluster
@@ -75,7 +75,7 @@ services:
     networks: [kafka-net]
 
   kafdrop:
-    image: obsidiandynamics/kafdrop:latest
+    image: obsidiandynamics/kafdrop:4.2.0
     container_name: kafdrop
     ports:
       - "9000:9000"
@@ -99,7 +99,7 @@ services:
     networks: [kafka-net]
 
   init-topic-telegraf:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:4.0.0
     depends_on: [kafka1]
     entrypoint: ["/bin/bash", "-c"]
     command: |
@@ -136,7 +136,7 @@ services:
     networks: [kafka-net]
 
   init-topic:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:4.0.0
     depends_on: [kafka1]
     entrypoint: ["/bin/bash", "-c"]
     command: |
