@@ -1,20 +1,3 @@
-Objectif : un script envoie dans InfluxDB, un check est réalisé, la notification rule est activée pour finir par appeler un endpoint qui appel un producteur kafka
-
-
-Etat des 
-
-
-<img src="docs/assets/check-push-to-kafka.png"
-     alt="check push to kafka"
-     width="400">
-
-<img src="docs/assets/notification-endpoint.png"
-     alt="notification endpoint"
-     width="400">
-
-<img src="docs/assets/notification-rule.png"
-     alt="notification rule"
-     width="400">
 
 
 ```pgsql
