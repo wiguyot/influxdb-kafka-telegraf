@@ -1,5 +1,11 @@
 #version: "3.8"
 
+volumes:
+  influxdb-data:
+  kafka1-data:
+  kafka2-data:
+  kafka3-data:
+
 services:
 
   influxdb:
@@ -8,7 +14,7 @@ services:
     ports:
       - "8086:8086"
     volumes:
-      - ./influxdb:/var/lib/influxdb2
+      - influxdb-data:/var/lib/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
@@ -38,7 +44,7 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
     volumes:
-      - ./kafka-data/kafka1:/bitnami/kafka
+      - kafka1-data:/bitnami/kafka
 
     networks: [kafka-net]
 
@@ -55,7 +61,7 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
     volumes:
-      - ./kafka-data/kafka2:/bitnami/kafka
+      - kafka2-data:/bitnami/kafka
     networks: [kafka-net]
 
   kafka3:
@@ -71,7 +77,7 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
     volumes:
-      - ./kafka-data/kafka3:/bitnami/kafka
+      - kafka3-data:/bitnami/kafka
     networks: [kafka-net]
 
   kafdrop:
