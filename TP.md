@@ -64,6 +64,7 @@ docker compose down -v
 	18. Quelle est la différence fondamentale entre le service "inject" et le service "producer" ? 
 	19. Proposez des voies d'amélioration de cette application de démonstration. 
 	20. Pourquoi le code python est encapsulé dans un container ? 
+	21. Corrigez l'organigramme du fichier README.md
   
 Pour aller plus loin : KEYWORDS.md du projet :) 
 
